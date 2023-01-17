@@ -32,6 +32,8 @@ def main():
             else:   
                 janela_chat = jn_chat(values['usuario'])
                 janela_usuario.hide()
+                if event == 'Enviar':
+                    print('a') ############ NAO PRINTA ######################
             
 
 
