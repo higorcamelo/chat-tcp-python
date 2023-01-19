@@ -14,7 +14,7 @@ def jn_chat(nome_usuario):
         [sg.Text('Olá, ' + nome_usuario)],
         [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar')],
         [sg.InputText(key = 'ip')],
-        [sg.Output(size = (60,20))],
+        [sg.Multiline(size = (60,20), disabled = True)],
         [sg.InputText(key = 'mensagem'), sg.Button('Enviar')],
     ]
     return sg.Window('Chat TCP', layout, finalize = True)
@@ -32,8 +32,8 @@ def main():
             else:   
                 janela_chat = jn_chat(values['usuario'])
                 janela_usuario.hide()
-                if event == 'Enviar':
-                    print('a') ############ NAO PRINTA ######################
+                if window == janela_chat and event == 'Enviar':
+                    print('mensagem') ############ NAO PRINTA ######################
             
 
 
