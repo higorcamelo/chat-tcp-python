@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import conexao
 
 
 def jn_usuario():
@@ -29,7 +30,8 @@ def main():
         if window == janela_usuario and event == 'Ok':
             if(values['usuario'] == ''):
                 sg.Popup('Insira um apelido válido')
-            else:   
+            else:
+                print(cnx.finalizado)
                 janela_chat = jn_chat(values['usuario'])
                 janela_usuario.hide()
                 if window == janela_chat and event == 'Enviar':
