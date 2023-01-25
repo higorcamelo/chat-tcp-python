@@ -26,4 +26,5 @@ def escrever():
 receber_thread = threading.Thread(target=receber)
 receber_thread.start()
 
-escrever_thread = threading.Thread()
+escrever_thread = threading.Thread(target=escrever())
+escrever_thread.start()

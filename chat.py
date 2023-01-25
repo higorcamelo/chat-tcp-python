@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-import conexao
 
 
 def jn_usuario():
@@ -35,8 +34,7 @@ def main():
                 janela_chat = jn_chat(values['usuario'])
                 janela_usuario.hide()
                 if window == janela_chat and event == 'Enviar':
-                    print('mensagem') # NAO PRINTA #
-            
+                    print('mensagem') # NAO PRINTA #         
 
 
 if __name__ == '__main__':
