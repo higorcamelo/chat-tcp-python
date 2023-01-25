@@ -1,15 +1,15 @@
 import socket
 import threading
 
-#host = ''
+host = '127.0.0.1'
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-servidor.bind(('localhost', 8888))
+servidor.bind((host, 8888))
+
 
 servidor.listen()
 
 apelidos, clientes = [], []
-cliente, end = servidor.accept()
 finalizado = False
 
 
@@ -32,6 +32,8 @@ def handle(client):
             apelidos.remove(apelido)
             finalizado = True
 
+
+
 def receber():
     while True:
         cliente, endereco = servidor.accept()
@@ -49,5 +51,6 @@ def receber():
         thread = threading.Thread(target=handle, args= (cliente,))
         thread.start()
 
-print('O servidor está aguardando...')
-receber()
+def main():
+    print('O servidor está aguardando...')
+    receber()

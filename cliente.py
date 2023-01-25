@@ -1,8 +1,10 @@
 import socket
 import threading
 
+host = '127.0.0.1'
+
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-cliente.connect(('localhost', 8888))
+cliente.connect((host, 8888))
 
 apelido = ''
 

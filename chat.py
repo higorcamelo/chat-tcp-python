@@ -1,5 +1,4 @@
-import PySimpleGUI as sg
-
+import PySimpleGUI as sg 
 
 def jn_usuario():
     layout = [
