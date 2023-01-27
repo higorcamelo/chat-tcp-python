@@ -4,9 +4,10 @@ import threading
 host = '127.0.0.1'
 
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-cliente.connect((host, 8888))
 
-apelido = ''
+cliente.connect((host, 8080))
+
+apelido = 'Teste'
 
 def receber():
     while True:
