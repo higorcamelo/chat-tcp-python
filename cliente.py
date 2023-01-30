@@ -26,8 +26,11 @@ def escrever():
     while True:
         msg = f'{apelido}: {input("")}'
 
-receber_thread = threading.Thread(target=receber)
-receber_thread.start()
+def main():
+    receber_thread = threading.Thread(target=receber)
+    receber_thread.start()
 
-escrever_thread = threading.Thread(target=escrever())
-escrever_thread.start()
+    escrever_thread = threading.Thread(target=escrever())
+    escrever_thread.start()
+
+main()
