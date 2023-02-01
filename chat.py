@@ -1,4 +1,5 @@
-import PySimpleGUI as sg 
+import PySimpleGUI as sg
+
 
 def jn_usuario():
     layout = [
@@ -12,7 +13,7 @@ def jn_chat(nome_usuario):
     layout = [
         [sg.Text('Olá, ' + nome_usuario)],
         [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar')],
-        [sg.InputText(key = 'ip')],
+        [sg.InputText(key = 'ip'), sg.Button('Hospedar conversa')],
         [sg.Multiline(size = (60,20), disabled = True)],
         [sg.InputText(key = 'mensagem'), sg.Button('Enviar')],
     ]
@@ -29,7 +30,6 @@ def main():
             if(values['usuario'] == ''):
                 sg.Popup('Insira um apelido válido')
             else:
-                print(cnx.finalizado)
                 janela_chat = jn_chat(values['usuario'])
                 janela_usuario.hide()
                 if window == janela_chat and event == 'Enviar':
