@@ -55,4 +55,3 @@ def main():
     print('O servidor está aguardando...')
     receber()
 
-main()
