@@ -7,12 +7,12 @@ cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 cliente.connect((host, 8080))
 
-apelido = 'Teste'
+apelido = 'Higor'
 
 def receber():
     while True:
         try:
-            msg = cliente.recv(1024).decode('UTF-8')
+            msg = cliente.recv(1024)
             if msg == '!apl':
                 cliente.send(apelido.encode('UTF-8'))
             else:
@@ -25,12 +25,13 @@ def receber():
 def escrever():
     while True:
         msg = f'{apelido}: {input("")}'
+        cliente.send(msg.encode('UTF-8'))
 
 def main():
     receber_thread = threading.Thread(target=receber)
     receber_thread.start()
 
-    escrever_thread = threading.Thread(target=escrever())
+    escrever_thread = threading.Thread(target=escrever)
     escrever_thread.start()
 
 main()

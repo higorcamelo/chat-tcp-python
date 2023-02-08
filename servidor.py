@@ -10,7 +10,6 @@ servidor.bind((host, 8080))
 servidor.listen()
 
 apelidos, clientes = [], []
-finalizado = False
 
 
 def transmissao(mensagem):
@@ -18,20 +17,20 @@ def transmissao(mensagem):
         cliente.send(mensagem)
 
 
-def handle(client):
-    while not finalizado:
+def handle(cliente):
+    while True:
         try:
             msg = cliente.recv(1024).decode('UTF-8')
+            print(f"{apelidos[clientes.index(cliente)]}: {msg}")
             transmissao(msg)
         except:
             index = clientes.index(cliente)
-            clientes.remove(client)
-            client(close)
+            clientes.remove(cliente)
+            cliente.close()
             apelido = apelidos[index]
-            broadcast(apelido + ' deixou a conversa...'.encode('UTF-8'))
+            print(apelido + ' deixou a conversa...'.encode('UTF-8'))
             apelidos.remove(apelido)
-            finalizado = True
-
+            break
 
 
 def receber():
@@ -39,8 +38,8 @@ def receber():
         cliente, endereco = servidor.accept()
         print('Conectado com ' + str(endereco))
 
-        cliente.send('APL'.encode('UTF-8'))
-        apelido = cliente.recv(1024).decode('UTF-8')
+        #cliente.send('APL'.encode('UTF-8'))
+        apelido = cliente.recv(1024).decode('UTF-8') ##########
         apelidos.append(apelido)
         clientes.append(cliente)
 
