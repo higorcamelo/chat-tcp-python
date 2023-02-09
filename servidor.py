@@ -39,13 +39,13 @@ def receber():
         print('Conectado com ' + str(endereco))
 
         cliente.send('APL'.encode('UTF-8'))
-        apelido = cliente.recv(1024).decode('UTF-8') ##########
+        apelido = cliente.recv(1024).decode('UTF-8') #########
         apelidos.append(apelido)
         clientes.append(cliente)
 
         print('O apelido do cliente é ' + apelido)
-        #transmissao(f'{str(apelido)} conectou-se ao servidor!')
-        #cliente.send('Conectado ao servidor!')
+        transmissao(f'{str(apelido)} conectou-se ao servidor!')
+        cliente.send('Conectado ao servidor!')
 
         thread = threading.Thread(target=handle, args= (cliente,))
         thread.start()
