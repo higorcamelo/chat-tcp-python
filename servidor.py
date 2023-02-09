@@ -43,12 +43,11 @@ def receber():
         apelidos.append(apelido)
         clientes.append(cliente)
 
-        print('O apelido do cliente é ' + apelido)
         transmissao(f'{str(apelido)} conectou-se ao servidor!')
         cliente.send('Conectado ao servidor!')
 
-        thread = threading.Thread(target=handle, args= (cliente,))
-        thread.start()
+        handle_thread = threading.Thread(target=handle, args = (cliente,))
+        handle_thread.start()
 
 def main():
     print('O servidor está aguardando...')
