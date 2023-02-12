@@ -12,8 +12,8 @@ def jn_usuario():
 def jn_chat(nome_usuario):
     layout = [
         [sg.Text('Olá, ' + nome_usuario)],
-        [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar')],
-        [sg.InputText(key = 'ip'), sg.Button('Hospedar conversa', key = 'host')],
+        [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar', key = '-CONEX-')],
+        [sg.InputText(key = '-IP-'), sg.Button('Hospedar conversa', key = '-HOST-')],
         [sg.Multiline(size = (60,20), disabled = True)],
         [sg.InputText(key = 'mensagem'), sg.Button('Enviar')],
     ]
@@ -22,14 +22,13 @@ def jn_chat(nome_usuario):
 def jn_host(nome_usuario):
     layout = [
         [sg.Text('Este é o servidor do ' + nome_usuario)],
-        [sg.InputText(key = 'ip'), sg.Button('Hospedar conversa', key = 'host')],
         [sg.Multiline(size = (60,20), disabled = True)],
-        [sg.Button('Encerrar Conexão', key = 'fim_conex')],
+        [sg.Button('Encerrar Conexão', key = '-FIM_CONEX-')],
     ]
     return sg.Window('Chat TCP', layout, finalize = True)
 
 def main():
-    janela_usuario, janela_chat, janela_host = jn_usuario(), None, None
+    janela_usuario, janela_chat, janela_host = jn_usuario(),None, None
     while True:
         window, event, values = sg.read_all_windows()
         
@@ -43,7 +42,9 @@ def main():
                 janela_usuario.hide()
             if window == janela_chat and event == 'Enviar':
                 print('mensagem') #NAO PRINTA#
-            if window == janela_chat and event == 'host':
+            if window == janela_chat and event == '-CONEX-':
+                pass
+            if window == janela_chat and event == '-HOST-':
                 janela_host = jn_host(values['usuário'])
                 janela_chat.hide()
 
