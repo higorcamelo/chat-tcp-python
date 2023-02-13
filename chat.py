@@ -1,10 +1,10 @@
 import PySimpleGUI as sg
-#import servidor as sv
+import servidor
 
 def jn_usuario():
     layout = [
         [sg.Text('Insira seu apelido:')],
-        [sg.InputText(key = 'usuario')],
+        [sg.InputText(key = '-USUARIO-')],
         [sg.Button('Ok')]
     ]
     return sg.Window('Chat TCP', layout, finalize = True)
@@ -15,7 +15,7 @@ def jn_chat(nome_usuario):
         [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar', key = '-CONEX-')],
         [sg.InputText(key = '-IP-'), sg.Button('Hospedar conversa', key = '-HOST-')],
         [sg.Output(size = (60,20))],
-        [sg.InputText(key = 'mensagem', do_not_clear=False), sg.Button('Enviar', key = '-ENVIAR-')],
+        [sg.InputText(key = '-MENSAGEM-', do_not_clear=False), sg.Button('Enviar', key = '-ENVIAR-')],
     ]
     return sg.Window('Chat TCP', layout, finalize = True)
 
@@ -36,21 +36,23 @@ def main():
             break
 
         if window == janela_usuario and event == 'Ok':
-            if(values['usuario'] == ''):
+            if(values['-USUARIO-'] == ''):
                 sg.Popup('Insira um apelido válido')
             else:
-                janela_chat = jn_chat(values['usuario'])
+                janela_chat = jn_chat(values['-USUARIO-'])
                 janela_usuario.hide()
 
         if window == janela_chat and event == '-ENVIAR-':
-            print(values['mensagem'])
+            if (values['-MENSAGEM-'] == ''):
+                pass
+            else:
+                print(values['-MENSAGEM-'])
 
         if window == janela_chat and event == '-CONEX-':
             pass
 
         if window == janela_chat and event == '-HOST-':
-            janela_host = jn_host(values['usuario'])
-            janela_chat.hide()
+            servidor.main() # Crasha 
 
 
 if __name__ == '__main__':
