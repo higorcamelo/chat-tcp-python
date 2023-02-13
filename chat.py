@@ -14,8 +14,8 @@ def jn_chat(nome_usuario):
         [sg.Text('Olá, ' + nome_usuario)],
         [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar', key = '-CONEX-')],
         [sg.InputText(key = '-IP-'), sg.Button('Hospedar conversa', key = '-HOST-')],
-        [sg.Multiline(size = (60,20), disabled = True)],
-        [sg.InputText(key = 'mensagem'), sg.Button('Enviar', key = '-ENVIAR-')],
+        [sg.Output(size = (60,20))],
+        [sg.InputText(key = 'mensagem', do_not_clear=False), sg.Button('Enviar', key = '-ENVIAR-')],
     ]
     return sg.Window('Chat TCP', layout, finalize = True)
 
@@ -28,25 +28,29 @@ def jn_host(nome_usuario):
     return sg.Window('Chat TCP', layout, finalize = True)
 
 def main():
-    janela_usuario, janela_chat, janela_host = jn_usuario(),None, None
+    janela_usuario, janela_chat, janela_host = jn_usuario(), None, None
     while True:
         window, event, values = sg.read_all_windows()
         
         if event == sg.WIN_CLOSED:
             break
+
         if window == janela_usuario and event == 'Ok':
             if(values['usuario'] == ''):
                 sg.Popup('Insira um apelido válido')
             else:
                 janela_chat = jn_chat(values['usuario'])
                 janela_usuario.hide()
-            if window == janela_chat and event == '-ENVIAR-':
-                print('mensagem') #NAO PRINTA#
-            if window == janela_chat and event == '-CONEX-':
-                pass
-            if window == janela_chat and event == '-HOST-':
-                janela_host = jn_host(values['usuário'])
-                janela_chat.hide()
+
+        if window == janela_chat and event == '-ENVIAR-':
+            print(values['mensagem'])
+
+        if window == janela_chat and event == '-CONEX-':
+            pass
+
+        if window == janela_chat and event == '-HOST-':
+            janela_host = jn_host(values['usuario'])
+            janela_chat.hide()
 
 
 if __name__ == '__main__':
