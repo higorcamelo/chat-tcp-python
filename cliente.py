@@ -13,10 +13,7 @@ def receber():
     while True:
         try:
             msg = cliente.recv(1024)
-            if msg == '!apl':
-                cliente.send(apelido.encode('UTF-8'))
-            else:
-                print(msg)
+            print(msg)
         except:
             print('Um erro ocorrreu...')
             cliente.close()
