@@ -25,10 +25,10 @@ def escrever():
         cliente.send(msg.encode('UTF-8'))
 
 def main():
-    receber_thread = threading.Thread(target=receber)
+    receber_thread = threading.Thread(target = receber)
     receber_thread.start()
 
-    escrever_thread = threading.Thread(target=escrever)
+    escrever_thread = threading.Thread(target = escrever)
     escrever_thread.start()
 
 main()
