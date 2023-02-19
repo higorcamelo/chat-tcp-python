@@ -31,4 +31,3 @@ def main():
     escrever_thread = threading.Thread(target = escrever)
     escrever_thread.start()
 
-main()
