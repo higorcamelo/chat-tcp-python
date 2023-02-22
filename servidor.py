@@ -14,7 +14,7 @@ apelidos, clientes = [], []
 
 def transmissao(mensagem):
     for cliente in clientes:
-        cliente.send(mensagem)
+        cliente.send(mensagem.encode('UTF-8'))
 
 
 def handle(cliente):
@@ -43,7 +43,7 @@ def receber():
         apelidos.append(apelido)
         clientes.append(cliente)
 
-        transmissao(f'{str(apelido)} conectou-se ao servidor!')
+        transmissao(f'{apelido} conectou-se ao servidor!'.decode('UTF-8'))
         cliente.send('Conectado ao servidor!')
 
         handle_thread = threading.Thread(target=handle, args = (cliente,))
@@ -52,3 +52,5 @@ def receber():
 def main():
     print('O servidor está aguardando...')
     receber()
+
+#main()
