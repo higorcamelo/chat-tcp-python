@@ -4,10 +4,13 @@ import threading
 host = '127.0.0.1'
 
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-cliente.connect((host, 8080))
+try:
+    cliente.connect((host, 8080))
+except ConnectionRefusedError:
+    print('Não foi possível realizar a conrexão')
 
 apelido = ''
+mensagem_temp = ''
 
 def receber():
     while True:
@@ -21,7 +24,7 @@ def receber():
 
 def escrever():
     while True:
-        msg = f'{apelido}: {input("")}'
+        msg = f'{apelido}: {input(mensagem_temp)}'
         cliente.send(msg.encode('UTF-8'))
 
 def main():

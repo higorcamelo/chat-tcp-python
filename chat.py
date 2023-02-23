@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
-import servidor
+#import servidor
+import cliente
 
 def jn_usuario():
     layout = [
@@ -36,23 +37,26 @@ def main():
             break
 
         if window == janela_usuario and event == 'Ok':
-            if(values['-USUARIO-'] == ''):
+            if values['-USUARIO-'] == '':
                 sg.Popup('Insira um apelido válido')
             else:
                 janela_chat = jn_chat(values['-USUARIO-'])
                 janela_usuario.hide()
 
         if window == janela_chat and event == '-ENVIAR-':
-            if (values['-MENSAGEM-'] == ''):
+            if values['-MENSAGEM-'] == '':
                 pass
             else:
                 print(values['-MENSAGEM-'])
 
         if window == janela_chat and event == '-CONEX-':
-            pass
+            cliente.apelido = values['-USUARIO-']
+
+            cliente.main()
 
         if window == janela_chat and event == '-HOST-':
-            servidor.main() # Crasha 
+            #servidor.main() # Crasha
+            pass
 
 
 if __name__ == '__main__':

@@ -38,8 +38,7 @@ def receber():
         cliente, endereco = servidor.accept()
         print('Conectado com ' + str(endereco))
 
-        cliente.send('APL'.encode('UTF-8'))
-        apelido = cliente.recv(1024).decode('UTF-8') #######
+        apelido = cliente.recv(1024).decode('UTF-8') ########
         apelidos.append(apelido)
         clientes.append(cliente)
 
