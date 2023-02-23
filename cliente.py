@@ -7,7 +7,7 @@ cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 cliente.connect((host, 8080))
 
-apelido = 'Higor'
+apelido = ''
 
 def receber():
     while True:

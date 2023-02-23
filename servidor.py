@@ -28,7 +28,7 @@ def handle(cliente):
             clientes.remove(cliente)
             cliente.close()
             apelido = apelidos[index]
-            print(apelido + ' deixou a conversa...'.encode('UTF-8'))
+            print(f'{apelido} deixou a conversa...')
             apelidos.remove(apelido)
             break
 
@@ -43,8 +43,8 @@ def receber():
         apelidos.append(apelido)
         clientes.append(cliente)
 
-        transmissao(f'{apelido} conectou-se ao servidor!'.decode('UTF-8'))
-        cliente.send('Conectado ao servidor!')
+        print(f'{apelido} conectou-se ao servidor!')
+        cliente.send('Conectado ao servidor!'.encode('UTF-8'))
 
         handle_thread = threading.Thread(target=handle, args = (cliente,))
         handle_thread.start()
@@ -53,4 +53,4 @@ def main():
     print('O servidor está aguardando...')
     receber()
 
-#main()
+main()
