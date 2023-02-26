@@ -10,7 +10,7 @@ except ConnectionRefusedError:
     print('Não foi possível realizar a conrexão')
 
 apelido = ''
-mensagem_temp = ''
+#mensagem_temp = ''
 
 def receber():
     while True:
@@ -22,7 +22,7 @@ def receber():
             cliente.close()
             break
 
-def escrever():
+def escrever(mensagem_temp):
     while True:
         msg = f'{apelido}: {input(mensagem_temp)}'
         cliente.send(msg.encode('UTF-8'))
