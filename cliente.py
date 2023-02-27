@@ -10,19 +10,21 @@ except ConnectionRefusedError:
     print('Não foi possível realizar a conrexão')
 
 apelido = ''
-#mensagem_temp = ''
+mensagem_temp = ''
 
 def receber():
     while True:
         try:
             msg = cliente.recv(1024)
             print(msg)
-        except:
-            print('Um erro ocorrreu...')
+        except ConnectionResetError:
+            print('A conexão foi desfeita inesperadamente...')
             cliente.close()
             break
+        except:
+            print('Outro erro ocorreu')
 
-def escrever(mensagem_temp):
+def escrever():
     while True:
         msg = f'{apelido}: {input(mensagem_temp)}'
         cliente.send(msg.encode('UTF-8'))

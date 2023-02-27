@@ -1,38 +1,42 @@
 import PySimpleGUI as sg
-#import servidor
+# import servidor
 import cliente
+
 
 def jn_usuario():
     layout = [
         [sg.Text('Insira seu apelido:')],
-        [sg.InputText(key = '-USUARIO-')],
+        [sg.InputText(key='-USUARIO-')],
         [sg.Button('Ok')]
     ]
-    return sg.Window('Chat TCP', layout, finalize = True)
+    return sg.Window('Chat TCP', layout, finalize=True)
+
 
 def jn_chat(nome_usuario):
     layout = [
         [sg.Text('Olá, ' + nome_usuario)],
-        [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar', key = '-CONEX-')],
-        [sg.InputText(key = '-IP-'), sg.Button('Hospedar conversa', key = '-HOST-')],
-        [sg.Output(size = (60,20))],
-        [sg.InputText(key = '-MENSAGEM-', do_not_clear=False), sg.Button('Enviar', key = '-ENVIAR-')],
+        [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar', key='-CONEX-')],
+        [sg.InputText(key='-IP-'), sg.Button('Hospedar conversa', key='-HOST-')],
+        [sg.Output(size=(60, 20))],
+        [sg.InputText(key='-MENSAGEM-', do_not_clear=False), sg.Button('Enviar', key='-ENVIAR-')],
     ]
-    return sg.Window('Chat TCP', layout, finalize = True)
+    return sg.Window('Chat TCP', layout, finalize=True)
+
 
 def jn_host(nome_usuario):
     layout = [
         [sg.Text('Este é o servidor do ' + nome_usuario)],
-        [sg.Multiline(size = (60,20), disabled = True)],
-        [sg.Button('Encerrar Conexão', key = '-FIM_CONEX-')],
+        [sg.Multiline(size=(60, 20), disabled=True)],
+        [sg.Button('Encerrar Conexão', key='-FIM_CONEX-')],
     ]
-    return sg.Window('Chat TCP', layout, finalize = True)
+    return sg.Window('Chat TCP', layout, finalize=True)
+
 
 def main():
     janela_usuario, janela_chat, janela_host = jn_usuario(), None, None
     while True:
         window, event, values = sg.read_all_windows()
-        
+
         if event == sg.WIN_CLOSED:
             break
 
@@ -47,7 +51,11 @@ def main():
             if values['-MENSAGEM-'] == '':
                 pass
             else:
-                print(values['-MENSAGEM-'])
+                if cliente.conectado:
+                    print(values['-MENSAGEM-'])
+
+                else:
+                    sg.Popup('Nenhuma conexão foi estabelecida')
 
         if window == janela_chat and event == '-CONEX-':
             cliente.apelido = values['-USUARIO-']
@@ -55,7 +63,7 @@ def main():
             cliente.main()
 
         if window == janela_chat and event == '-HOST-':
-            #servidor.main() # Crasha
+            # servidor.main() # Crasha
             pass
 
 
