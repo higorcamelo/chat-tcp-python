@@ -6,7 +6,6 @@ host = '127.0.0.1'
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 servidor.bind((host, 2525))
 
-
 servidor.listen()
 
 apelidos, clientes = [], []
@@ -18,6 +17,8 @@ def transmissao(mensagem):
 
 
 def handle(cliente):
+    global apelidos
+    global clientes
     while True:
         try:
             msg = cliente.recv(1024).decode('UTF-8')
@@ -35,21 +36,22 @@ def handle(cliente):
 
 
 def receber():
+    global apelidos
+    global clientes
     while True:
         cliente, endereco = servidor.accept()
         print('Conectado com ' + str(endereco))
 
-        apelido = cliente.recv(1024).decode('UTF-8') ########
+        apelido = cliente.recv(1024).decode('UTF-8')
         apelidos.append(apelido)
         clientes.append(cliente)
 
         print(f'{apelido} conectou-se ao servidor!')
         cliente.send('Conectado ao servidor!'.encode('UTF-8'))
 
+        threading.Thread(target=handle, args=(cliente,)).start()
+
 
 def main():
     print('O servidor está aguardando...')
     threading.Thread(target=receber).start()
-
-
-#main()
