@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-# import servidor
+import servidor
 import cliente
 
 
@@ -63,7 +63,7 @@ def main():
             cliente.main()
 
         if window == janela_chat and event == '-HOST-':
-            # servidor.main() # Crasha
+            servidor.main() # Crasha
             pass
 
 

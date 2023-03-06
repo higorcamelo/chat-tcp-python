@@ -4,7 +4,7 @@ import threading
 host = '127.0.0.1'
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-servidor.bind((host, 8080))
+servidor.bind((host, 2525))
 
 
 servidor.listen()
@@ -22,7 +22,8 @@ def handle(cliente):
         try:
             msg = cliente.recv(1024).decode('UTF-8')
             print(f"{apelidos[clientes.index(cliente)]}: {msg}")
-            transmissao(msg)
+            index = clientes.index(cliente)
+            transmissao(f"{apelidos[index]}: {msg}")
         except:
             index = clientes.index(cliente)
             clientes.remove(cliente)
@@ -45,11 +46,10 @@ def receber():
         print(f'{apelido} conectou-se ao servidor!')
         cliente.send('Conectado ao servidor!'.encode('UTF-8'))
 
-        handle_thread = threading.Thread(target=handle, args = (cliente,))
-        handle_thread.start()
 
 def main():
     print('O servidor está aguardando...')
-    receber()
+    threading.Thread(target=receber).start()
 
-main()
+
+#main()
