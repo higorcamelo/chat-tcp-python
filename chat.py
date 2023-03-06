@@ -63,8 +63,9 @@ def main():
             cliente.main()
 
         if window == janela_chat and event == '-HOST-':
-            servidor.main() # Crasha
-            pass
+            janela_host = jn_host(values['-USUARIO-'])
+            janela_chat.hide()
+            #servidor.main()
 
 
 if __name__ == '__main__':
