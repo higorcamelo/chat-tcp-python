@@ -1,72 +1,68 @@
 import PySimpleGUI as sg
-import servidor
 import cliente
-
 
 def jn_usuario():
     layout = [
         [sg.Text('Insira seu apelido:')],
         [sg.InputText(key='-USUARIO-')],
-        [sg.Button('Ok')]
+        [sg.Button('Iniciar Chat')]
     ]
     return sg.Window('Chat TCP', layout, finalize=True)
-
 
 def jn_chat(nome_usuario):
     layout = [
-        [sg.Text('Olá, ' + nome_usuario)],
-        [sg.Text('Insira um IP para se conectar:'), sg.Button('Conectar', key='-CONEX-')],
-        [sg.InputText(key='-IP-'), sg.Button('Hospedar conversa', key='-HOST-')],
-        [sg.Output(size=(60, 20))],
-        [sg.InputText(key='-MENSAGEM-', do_not_clear=False), sg.Button('Enviar', key='-ENVIAR-')],
+        [sg.Text(f'Olá, {nome_usuario}!', font=('Helvetica', 12))],
+        [sg.Text('Insira o endereço IP do servidor e a porta para se conectar:')],
+        [sg.InputText(key='-IP-', size=(15, 1)), sg.InputText(key='-PORTA-', size=(6, 1))],
+        [sg.Button('Conectar', key='-CONEX-'), sg.Button('Hospedar Conversa', key='-HOST-')],
+        [sg.Multiline(key='-CONVERSATION-', size=(60, 15), disabled=True, autoscroll=True)],
+        [sg.InputText(key='-MENSAGEM-', do_not_clear=False, size=(40, 1)), sg.Button('Enviar', key='-ENVIAR-')],
+        [sg.Text('Status: Não conectado', key='-STATUS-', size=(30, 1))],
     ]
     return sg.Window('Chat TCP', layout, finalize=True)
-
-
-def jn_host(nome_usuario):
-    layout = [
-        [sg.Text('Este é o servidor do ' + nome_usuario)],
-        [sg.Multiline(size=(60, 20), disabled=True)],
-        [sg.Button('Encerrar Conexão', key='-FIM_CONEX-')],
-    ]
-    return sg.Window('Chat TCP', layout, finalize=True)
-
 
 def main():
-    janela_usuario, janela_chat, janela_host = jn_usuario(), None, None
+    janela_usuario, janela_chat = jn_usuario(), None
+    nome_usuario = ""
+
     while True:
         window, event, values = sg.read_all_windows()
 
         if event == sg.WIN_CLOSED:
             break
 
-        if window == janela_usuario and event == 'Ok':
-            if values['-USUARIO-'] == '':
-                sg.Popup('Insira um apelido válido')
-            else:
-                janela_chat = jn_chat(values['-USUARIO-'])
+        if window == janela_usuario and event == 'Iniciar Chat':
+            nome_usuario = values['-USUARIO-']
+            if nome_usuario:
+                janela_chat = jn_chat(nome_usuario)
                 janela_usuario.hide()
-
-        if window == janela_chat and event == '-ENVIAR-':
-            if values['-MENSAGEM-'] == '':
-                pass
             else:
-                if cliente.conectado:
-                    print(values['-MENSAGEM-'])
+                sg.Popup('Insira um apelido válido')
 
+        if window == janela_chat:
+            if event == '-ENVIAR-':
+                mensagem = values['-MENSAGEM-']
+                if mensagem:
+                    # Adicione a mensagem ao histórico de conversa
+                    conversation = window['-CONVERSATION-']
+                    conversation.update(value=f'Você: {mensagem}\n', append=True)
+                    # Lógica para enviar a mensagem
+                    if cliente.conectado:
+                        print(mensagem)
+                    else:
+                        sg.Popup('Nenhuma conexão foi estabelecida')
                 else:
-                    sg.Popup('Nenhuma conexão foi estabelecida')
-
-        if window == janela_chat and event == '-CONEX-':
-            cliente.apelido = values['-USUARIO-']
-
-            cliente.main()
-
-        if window == janela_chat and event == '-HOST-':
-            janela_host = jn_host(values['-USUARIO-'])
-            janela_chat.hide()
-            #servidor.main()
-
+                    sg.Popup('Insira uma mensagem válida')
+            elif event == '-CONEX-':
+                # Lógica para conexão
+                sg.popup('Conectar a', values['-IP-'], values['-PORTA-'])
+                # Atualize o status de conexão
+                window['-STATUS-'].update('Status: Conectando...')
+            elif event == '-HOST-':
+                # Lógica para hospedar a conversa
+                sg.popup('Hospedando a conversa')
+                # Atualize o status de conexão
+                window['-STATUS-'].update('Status: Hospedando Conversa')
 
 if __name__ == '__main__':
     main()
