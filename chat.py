@@ -10,14 +10,17 @@ def jn_usuario():
     return sg.Window('Chat TCP', layout, finalize=True)
 
 def jn_chat(nome_usuario):
+        
     layout = [
         [sg.Text(f'Olá, {nome_usuario}!', font=('Helvetica', 12))],
         [sg.Text('Insira o endereço IP do servidor e a porta para se conectar:')],
-        [sg.InputText(key='-IP-', size=(15, 1)), sg.InputText(key='-PORTA-', size=(6, 1))],
-        [sg.Button('Conectar', key='-CONEX-'), sg.Button('Hospedar Conversa', key='-HOST-')],
+        [sg.InputText(key='-IP-', size=(15, 1), tooltip='Formato válido: 0.0.0.0'),
+         sg.InputText(key='-PORTA-', size=(6, 1)),
+         sg.Button('Conectar', key='-CONEX-'),
+         sg.Button('Hospedar Conversa', key='-HOST-')],
         [sg.Multiline(key='-CONVERSATION-', size=(60, 15), disabled=True, autoscroll=True)],
         [sg.InputText(key='-MENSAGEM-', do_not_clear=False, size=(40, 1)), sg.Button('Enviar', key='-ENVIAR-')],
-        [sg.Text('Status: Não conectado', key='-STATUS-', size=(30, 1))],
+        [sg.Text('Status: Não conectado', key='-STATUS-', size=(30, 1), text_color='white')],
     ]
     return sg.Window('Chat TCP', layout, finalize=True)
 
