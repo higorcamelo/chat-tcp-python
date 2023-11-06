@@ -1,46 +1,25 @@
 import socket
-import threading
 
-host = '127.0.0.1'
-global apelido
-global mensagem_temp
-conectado = False
+cliente_socket = None
 
-cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-def conectar(apelido):
-    global conectado
-    global cliente
+def conectar_servidor(ip, porta):
+    global cliente_socket
     try:
-        cliente.connect((host, 2525))
-        cliente.send(apelido.encode('UTF-8'))
-        conectado = True
+        cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        cliente_socket.connect((ip, porta))
         return True
-    except:
-        print('Não foi possível realizar a conexão')
+    except Exception as e:
+        print(f'Erro ao conectar: {e}')
+        cliente_socket = None
         return False
 
-def receber():
-    global conectado
-    while conectado:
-        try:
-            msg = cliente.recv(1024)
-            print(msg)
-        except:
-            print('A conexão foi desfeita inesperadamente...')
-            cliente.close()
-            conectado = False
-            break
+def enviar_mensagem(mensagem):
+    global cliente_socket
+    if cliente_socket:
+        cliente_socket.send(mensagem.encode())
 
-def escrever(mensagem):
-    global conectado
-    global cliente
-    if conectado:
-        msg = f'{apelido}: {mensagem}\n'
-        cliente.send(msg.encode('UTF-8'))
-    else:
-        print('Nenhuma conexão foi estabelecida')
-
-def main():
-    receber_thread = threading.Thread(target = receber)
-    receber_thread.start()
+def encerrar_conexao():
+    global cliente_socket
+    if cliente_socket:
+        cliente_socket.close()
+        cliente_socket = None
