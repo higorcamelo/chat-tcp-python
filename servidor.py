@@ -1,57 +1,51 @@
 import socket
 import threading
 
-host = '127.0.0.1'
+# Lista para manter as conexões dos clientes
+clientes = []
 
-servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-servidor.bind((host, 2525))
+def aceitar_conexoes(ip, porta):
+    servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    servidor.bind((ip, porta))
+    servidor.listen(5)
+    print(f"Servidor ouvindo em {ip}:{porta}")
 
-servidor.listen()
+    while True:
+        cliente_socket, cliente_endereco = servidor.accept()
+        print(f"Nova conexão de {cliente_endereco}")
+        clientes.append(cliente_socket)
 
-apelidos, clientes = [], []
+        # Iniciar uma nova thread para lidar com a conexão do cliente
+        thread = threading.Thread(target=atender_cliente, args=(cliente_socket,))
+        thread.start()
 
-
-def transmissao(mensagem):
-    for cliente in clientes:
-        cliente.send(mensagem.encode('UTF-8'))
-
-
-def handle(cliente):
-    global apelidos
-    global clientes
+def atender_cliente(cliente_socket):
     while True:
         try:
-            msg = cliente.recv(1024).decode('UTF-8')
-            print(f"{apelidos[clientes.index(cliente)]}: {msg}")
-            index = clientes.index(cliente)
-            transmissao(f"{apelidos[index]}: {msg}")
-        except:
-            index = clientes.index(cliente)
-            clientes.remove(cliente)
-            cliente.close()
-            apelido = apelidos[index]
-            print(f'{apelido} deixou a conversa...')
-            apelidos.remove(apelido)
+            mensagem = cliente_socket.recv(1024)
+            if not mensagem:
+                break
+            # Encaminhe a mensagem para todos os outros clientes conectados
+            encaminhar_mensagem(cliente_socket, mensagem)
+        except Exception as e:
+            print(f"Erro na conexão do cliente: {e}")
+            clientes.remove(cliente_socket)
+            cliente_socket.close()
             break
 
+def encaminhar_mensagem(emissor, mensagem):
+    for cliente in clientes:
+        if cliente != emissor:
+            try:
+                cliente.send(mensagem)
+            except Exception as e:
+                print(f"Erro ao encaminhar mensagem: {e}")
+                clientes.remove(cliente)
+                cliente.close()
 
-def receber():
-    global apelidos
-    global clientes
-    while True:
-        cliente, endereco = servidor.accept()
-        print('Conectado com ' + str(endereco))
+if __name__ == '__main__':
+    # Define o IP e a porta do servidor
+    servidor_ip = '0.0.0.0'  # Pode ser 'localhost' para conexões locais
+    servidor_porta = 12345  # Porta do servidor
 
-        apelido = cliente.recv(1024).decode('UTF-8')
-        apelidos.append(apelido)
-        clientes.append(cliente)
-
-        print(f'{apelido} conectou-se ao servidor!')
-        cliente.send('Conectado ao servidor!'.encode('UTF-8'))
-
-        threading.Thread(target=handle, args=(cliente,)).start()
-
-
-def main():
-    print('O servidor está aguardando...')
-    threading.Thread(target=receber).start()
+    aceitar_conexoes(servidor_ip, servidor_porta)
